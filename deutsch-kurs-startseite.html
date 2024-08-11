@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title"></title>
+    <link rel="stylesheet" href="styles-deutsch.css">
+    <link rel="stylesheet" href="style-kontaktformular.css">
+    <script src="translate.js" defer></script>
+</head>
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-shrink" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#page-top"><img src="bilder/0001.png" /></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars ms-1"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#ueberuns" data-i18n="1"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portfolio" data-i18n="2"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#team" data-i18n="3"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact" data-i18n="4"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#kontakt" data-i18n="5"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#kontakt"><span data-i18n="6"></span>
+                        <button data-i18n="lan1" onclick="changeLanguage('de')"></button>
+                        <button data-i18n="lan2" onclick="changeLanguage('en')"></button>
+                        <button data-i18n="lan3" onclick="changeLanguage('ru')"></button></a>
+                    </li>
+                     <!--  <span data-i18n="sprache"> Sprache: <button onclick="changeLanguage('en')">Englisch</button>
+                        <button onclick="changeLanguage('fr')">Französisch</button></span>-->
+                        <span></span>
+
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="black" data-i18n="Hi"></div>
+    <span data-i18n="7"></span>
+    <table style='padding: 8px;'>
+        <thead>
+            <tr>
+                <th index="0" data-i18n="10">
+                    <div class="filter"></div>
+                </th>
+                <th index="1" data-i18n="11">
+                    <div class="filter"></div>
+                </th>
+                <th index="2" data-i18n="12">
+                    <div class="filter"></div>
+                </th>
+                <th index="3" data-i18n="13">
+                    <div class="filter"></div>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="studentTableBody">
+            <!-- Daten kommen aus JavaScript -->
+        </tbody>
+    </table>
+
+<h3 class="ueberschrift" data-i18n="Kontakt"></h3>
+    <div class="wrapper">
+        
+        <form action="smtp2go.php" method="post">
+            <table>
+                <tr>
+                    <td data-i18n="name"></td>
+                    <td><input type="text" name="Vorname"></td>
+                </tr>
+                <tr>
+                    <td data-i18n="surname"></td>
+                    <td><input type="text" name="Nachname"></td>
+                </tr>
+                <tr>
+                    <td data-i18n="email"></td>
+                    <td><input type="text" name="E-Mail"></td>
+                </tr>
+                <tr>
+                    <td data-i18n="tel"></td>
+                    <td><input type="text" name="Telefon"></td>
+                </tr>
+                <tr>
+                    <td data-i18n="topic"></td>
+                    <td><input type="text" name="Betreff"></td>
+                </tr>
+                <tr>
+                    <td data-i18n="message"></td>
+                    <td><input type="textarea" name="Nachricht"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Abschicken"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
