@@ -13,31 +13,17 @@ async function fetchLanguageData(lang) {
 }
 
 // Function to fetch student data from a JSON file
-async function fetchStudentData(lang) {
+async function fetchStudentData() {
     try {
         const response = await fetch("data.json");
         if (!response.ok) {
-            throw new Error(`Could not fetch data for ${lang}: ${response.statusText}`);
+            throw new Error(`Could not fetch data.json: ${response.statusText}`);
         }
         return response.json();
     } catch (error) {
         console.error('Error loading student data:', error);
         return { students: [] };
     }
-}
-
-// Function to change the language
-async function changeLanguage(lang) {
-    localStorage.setItem("selectedLanguage", lang); // Store the selected language
-    
-    // Fetch language data and student data in parallel
-    const [langData, studentData] = await Promise.all([
-        fetchLanguageData(lang),
-        fetchStudentData(lang)
-    ]);
-
-    updateLanguage(langData); // Update the text on the page with the fetched language data
-    populateStudentTable(studentData.students); // Populate the table with student data
 }
 
 // Function to update the language on the page
@@ -58,6 +44,9 @@ function populateStudentTable(students) {
     // Clear the table body before adding new rows
     studentTableBody.innerHTML = '';
 
+    // Build rows in-memory and then insert them into the DOM in one go
+    const fragment = document.createDocumentFragment();
+
     students.forEach(student => {
         const row = document.createElement('tr');
         for (const key in student) {
@@ -65,56 +54,48 @@ function populateStudentTable(students) {
             cell.textContent = student[key];
             row.appendChild(cell);
         }
-        studentTableBody.appendChild(row);
+        fragment.appendChild(row);
     });
+
+    studentTableBody.appendChild(fragment); // Add new rows in one operation
 }
 
 // Function that runs when the page is loaded
 window.onload = async function () {
     const savedLanguage = localStorage.getItem("selectedLanguage") || "de"; // Default to German
-    
-    // Fetch language data and student data in parallel
-    const [langData, studentData] = await Promise.all([
-        fetchLanguageData(savedLanguage),
-        fetchStudentData(savedLanguage)
-    ]);
 
-    updateLanguage(langData); // Update the text on the page with the fetched language data
-    populateStudentTable(studentData.students); // Populate the table with student data
-}
+    // Start fetching both language data and student data simultaneously
+    const langDataPromise = fetchLanguageData(savedLanguage);
+    const studentDataPromise = fetchStudentData();
 
-
-// Function to load student data from JSON and populate the table
-async function loadStudentData(lang) {
     try {
-        const response = await fetch(`data/${lang}.json`);
-        if (!response.ok) {
-            throw new Error(`Could not fetch data for ${lang}: ${response.statusText}`);
-        }
-        const data = await response.json();
-        const studentTableBody = document.getElementById('studentTableBody');
-
-        // Clear the table body before adding new rows
-        studentTableBody.innerHTML = '';
-
-        data.students.forEach(student => {
-            const row = document.createElement('tr');
-            for (const key in student) {
-                const cell = document.createElement('td');
-                cell.textContent = student[key];
-                row.appendChild(cell);
-            }
-            studentTableBody.appendChild(row);
+        // Process language data as soon as it's ready
+        langDataPromise.then(langData => {
+            updateLanguage(langData);
+        }).catch(error => {
+            console.error('Error updating language:', error);
         });
-    } catch (error) {
-        console.error('Error loading student data:', error);
-    }
-}
 
-// Function that runs when the page is loaded
-window.onload = async function () {
-    const savedLanguage = localStorage.getItem("selectedLanguage") || "de"; // Default to German
-    const langData = await fetchLanguageData(savedLanguage); // Fetch the language data
-    updateLanguage(langData); // Update the text on the page with the fetched data
-    loadStudentData(savedLanguage); // Load student data for the saved language
+        // Process student data as soon as it's ready
+        studentDataPromise.then(studentData => {
+            populateStudentTable(studentData.students);
+        }).catch(error => {
+            console.error('Error populating student table:', error);
+        });
+
+    } catch (error) {
+        console.error('Error during data fetching or UI update:', error);
+    }
+};
+
+// Function to change the language
+async function changeLanguage(lang) {
+    localStorage.setItem("selectedLanguage", lang); // Store the selected language
+    try {
+        // Fetch new language data and update the UI
+        const langData = await fetchLanguageData(lang);
+        updateLanguage(langData);
+    } catch (error) {
+        console.error('Error changing language:', error);
+    }
 }
