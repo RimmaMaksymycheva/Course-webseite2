@@ -1,4 +1,3 @@
-//1679
 // Function to fetch language data from a JSON file
 async function fetchLanguageData(lang) {
     try {
